@@ -34,6 +34,8 @@ function displayVictoryMessage(message) {
     victoryMessage.textContent = message;
     victoryMessage.style.display = "block";
     isGameRunning = false;
+    playSoundEffect("./sfx/victory.mp3");
+    playSoundEffect("./sfx/yay.mp3");
 }
 
 // RESET GAME
@@ -105,12 +107,14 @@ function moveBall() {
     if (ballBounds.top <= arenaBounds.top) {
         ballSpeedY = Math.abs(ballSpeedY); 
         ballY = arenaBounds.top + 1; 
+        playSoundEffect("./sfx/boing.mp3");
     }
 
    
     if (ballBounds.bottom >= arenaBounds.bottom) {
         ballSpeedY = -Math.abs(ballSpeedY);
         ballY = arenaBounds.bottom - ballBounds.height - 1; 
+        playSoundEffect("./sfx/boing.mp3");
     }
 
     if (
@@ -120,6 +124,7 @@ function moveBall() {
     ) {
         ballSpeedX = Math.abs(ballSpeedX);
         ballX = leftPaddleBounds.right + ballBounds.width; 
+        playSoundEffect("./sfx/boing.mp3");
     }
 
     if (
@@ -129,6 +134,7 @@ function moveBall() {
     ) {
         ballSpeedX = -Math.abs(ballSpeedX); 
         ballX = rightPaddleBounds.left - ballBounds.width - 1; 
+        playSoundEffect("./sfx/boing.mp3");
     }
 
    
@@ -136,19 +142,20 @@ function moveBall() {
         scoreRight++;
         updateScore();
         resetBall();
+        playSoundEffect("./sfx/score.mp3");
         return;
+
     } else if (ballBounds.right >= arenaBounds.right) {
         scoreLeft++;
         updateScore();
         resetBall();
+        playSoundEffect("./sfx/score.mp3");
         return;
     }
 
     ball.style.left = ballX + "px";
     ball.style.top = ballY + "px";
 }
-
-
 
 // RESET BALL
 function resetBall() {
@@ -158,6 +165,14 @@ function resetBall() {
     ballSpeedY = Math.random() > 0.5 ? 3 : -3;
     ball.style.left = ballX + "px";
     ball.style.top = ballY + "px";
+}
+
+// SOUND EFFECT
+function playSoundEffect(soundUrl) {
+    const audio = new Audio(soundUrl);
+    audio.play().catch(error => {
+        console.error("Error playing:", error);
+    });
 }
 
 // GAME LOOP
